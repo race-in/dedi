@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 tput sgr0; clear
 
 ## Load Seedbox Components
@@ -65,6 +65,9 @@ else
 	VER=$(uname -r)
 fi
 
+# Normalize distro major version (e.g. 12.7 -> 12)
+VER_MAJOR=$(printf '%s' "$VER" | cut -d. -f1)
+
 if [[ ! "$OS" =~ "Debian" ]] && [[ ! "$OS" =~ "Ubuntu" ]]; then	#Only Debian and Ubuntu are supported
 	fail "$OS $VER is not supported"
 	info "Only Debian 10+ and Ubuntu 20.04+ are supported"
@@ -72,9 +75,9 @@ if [[ ! "$OS" =~ "Debian" ]] && [[ ! "$OS" =~ "Ubuntu" ]]; then	#Only Debian and
 fi
 
 if [[ "$OS" =~ "Debian" ]]; then	#Debian 10+ are supported
-	if [[ ! "$VER" =~ "10" ]] && [[ ! "$VER" =~ "11" ]] && [[ ! "$VER" =~ "12" ]]; then
-		fail "$OS $VER is not supported"
-		info "Only Debian 10+ are supported"
+    if [[ "$VER_MAJOR" != "10" ]] && [[ "$VER_MAJOR" != "11" ]] && [[ "$VER_MAJOR" != "12" ]] && [[ "$VER_MAJOR" != "13" ]]; then
+        fail "$OS $VER is not supported"
+		info "Only Debian 10, 11, 12 and 13 are supported"
 		exit 1
 	fi
 fi
